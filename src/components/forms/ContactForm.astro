@@ -1,0 +1,163 @@
+---
+// Contact form — POSTs to the `contact` Supabase Edge Function.
+// Mirrors the SubscribeForm multi-instance pattern (class-based, scoped script).
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<form class="yonder-contact-form flex flex-col gap-3" novalidate>
+  <div class="flex flex-col gap-2">
+    <label class="font-display uppercase tracking-wider text-xs text-yonder-bone-500">
+      Name
+      <input
+        type="text"
+        name="name"
+        required
+        autocomplete="name"
+        maxlength="200"
+        class="mt-1 block w-full bg-transparent border border-yonder-ink-600 px-3 py-2 text-yonder-bone-200 placeholder-yonder-bone-500 focus:outline-none focus:border-yonder-brass font-serif text-base normal-case tracking-normal"
+      />
+    </label>
+    <label class="font-display uppercase tracking-wider text-xs text-yonder-bone-500">
+      Email
+      <input
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        maxlength="320"
+        class="mt-1 block w-full bg-transparent border border-yonder-ink-600 px-3 py-2 text-yonder-bone-200 placeholder-yonder-bone-500 focus:outline-none focus:border-yonder-brass font-serif text-base normal-case tracking-normal"
+      />
+    </label>
+    <label class="font-display uppercase tracking-wider text-xs text-yonder-bone-500">
+      Message
+      <textarea
+        name="message"
+        required
+        rows="6"
+        maxlength="5000"
+        class="mt-1 block w-full bg-transparent border border-yonder-ink-600 px-3 py-2 text-yonder-bone-200 placeholder-yonder-bone-500 focus:outline-none focus:border-yonder-brass font-serif text-base normal-case tracking-normal resize-y"
+      ></textarea>
+    </label>
+    <!-- Honeypot — hidden from humans, attractive to bots -->
+    <input
+      type="text"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+      class="absolute left-[-9999px] w-px h-px opacity-0"
+    />
+  </div>
+  <div
+    class="cf-turnstile"
+    data-sitekey={turnstileSiteKey}
+    data-theme="dark"
+    data-size="flexible"
+  ></div>
+  <button
+    type="submit"
+    class="self-start bg-yonder-brass text-yonder-ink-950 px-4 py-2 font-display uppercase tracking-wider text-sm hover:bg-yonder-bone-200 transition-colors disabled:opacity-50"
+  >
+    Send
+  </button>
+  <p
+    class="yonder-contact-status mt-2 text-sm text-yonder-bone-500 min-h-[1.25rem]"
+    aria-live="polite"
+  ></p>
+</form>
+
+<script
+  is:inline
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer></script>
+
+<script>
+  import { createClient } from '@supabase/supabase-js';
+
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  if (!url || !key) {
+    console.error('Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_PUBLISHABLE_KEY');
+  }
+
+  const supabase = createClient(url, key);
+
+  document
+    .querySelectorAll<HTMLFormElement>('.yonder-contact-form')
+    .forEach(setupForm);
+
+  function setupForm(form: HTMLFormElement) {
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const statusEl = form.querySelector<HTMLElement>('.yonder-contact-status');
+    const turnstileEl = form.querySelector<HTMLElement>('.cf-turnstile');
+    if (!button || !statusEl) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const email = String(data.get('email') ?? '').trim();
+      const message = String(data.get('message') ?? '').trim();
+      const website = String(data.get('website') ?? '');
+      const turnstileToken = String(data.get('cf-turnstile-response') ?? '');
+
+      if (!name) {
+        setStatus(statusEl, 'Please enter your name.', 'error');
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        setStatus(statusEl, 'Please enter a valid email.', 'error');
+        return;
+      }
+      if (!message) {
+        setStatus(statusEl, 'Please enter a message.', 'error');
+        return;
+      }
+      if (!turnstileToken) {
+        setStatus(statusEl, 'Please wait for the security check to finish, then try again.', 'error');
+        return;
+      }
+
+      button.disabled = true;
+      setStatus(statusEl, 'Sending…', 'pending');
+
+      const { data: result, error } = await supabase.functions.invoke('contact', {
+        body: {
+          name,
+          email,
+          message,
+          website,
+          turnstile_token: turnstileToken,
+          source: window.location.pathname || '/',
+        },
+      });
+
+      button.disabled = false;
+
+      const turnstile = (window as any).turnstile;
+      if (turnstile?.reset && turnstileEl) turnstile.reset(turnstileEl);
+
+      if (error) {
+        console.error(error);
+        setStatus(statusEl, "Couldn't send right now — try again in a minute?", 'error');
+        return;
+      }
+
+      setStatus(statusEl, "Thanks — your message is on its way. We'll be in touch.", 'ok');
+      form.reset();
+    });
+  }
+
+  function setStatus(el: HTMLElement, msg: string, kind: 'ok' | 'error' | 'pending') {
+    el.textContent = msg;
+    el.className =
+      'yonder-contact-status mt-2 text-sm min-h-[1.25rem] ' +
+      (kind === 'ok'
+        ? 'text-yonder-brass'
+        : kind === 'error'
+        ? 'text-red-400'
+        : 'text-yonder-bone-500');
+  }
+</script>

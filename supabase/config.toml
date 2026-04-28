@@ -1,0 +1,22 @@
+project_id = "wfksfzajjvzyerxrjrvh"
+
+[functions.subscribe]
+enabled = true
+# verify_jwt is off because we're using the new sb_publishable_ key system,
+# which isn't a JWT and so can't pass Supabase's JWT-verification gateway.
+# Function does its own validation (email format, honeypot). Add Cloudflare
+# Turnstile here once we wire it up — that's what DCLT uses for bot defense.
+verify_jwt = false
+entrypoint = "./functions/subscribe/index.ts"
+
+[functions.confirm-subscription]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/confirm-subscription/index.ts"
+
+[functions.contact]
+enabled = true
+# Same reason as `subscribe`: new sb_publishable_ keys aren't JWTs, so the
+# gateway can't verify them. Function does its own auth: Turnstile, honeypot.
+verify_jwt = false
+entrypoint = "./functions/contact/index.ts"

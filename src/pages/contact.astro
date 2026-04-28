@@ -1,11 +1,12 @@
 ---
 import Base from '@layouts/Base.astro';
+import ContactForm from '@components/forms/ContactForm.astro';
 ---
 
 <Base title="Contact — Yonder Art Land">
-  <section class="px-6 py-16 max-w-3xl mx-auto">
+  <section class="px-6 py-16 max-w-2xl mx-auto">
     <h1 class="font-display text-4xl mb-8">Contact</h1>
-    <div class="font-serif text-lg text-yonder-bone-300 space-y-4">
+    <div class="font-serif text-lg text-yonder-bone-300 space-y-2 mb-12">
       <p>321 Steele Street, Algoma, WI 54201</p>
       <p>
         <a href="tel:9202644325" class="hover:text-yonder-brass">
@@ -13,5 +14,9 @@ import Base from '@layouts/Base.astro';
         </a>
       </p>
     </div>
+    <h2 class="font-display text-2xl uppercase tracking-wider text-yonder-bone-200 mb-6">
+      Send a note
+    </h2>
+    <ContactForm />
   </section>
 </Base>

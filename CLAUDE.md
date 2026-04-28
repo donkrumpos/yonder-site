@@ -15,37 +15,59 @@ Astro 4 + Tailwind 3 + React 18 + Supabase + Resend. Sibling repo to `reliquary`
 
 ## Current state (2026-04-28)
 
-Scaffold only. No real content migrated yet.
+WP migration done. Subscribe flow wired up end-to-end. Templates still
+render text-only (no images yet).
 
 - Layout shell: Base.astro, Header, Footer, SubscribeForm
-- Page stubs: `/`, `/about`, `/contact`, `/shop`, `/krampusnacht-2026`, `/projects`, `/projects/[slug]`
-- Content collection schema: `src/content/config.ts` — matches frontmatter from yonder-reference (title, date, slug, status, categories, latitude, longitude, address, hero_quote)
-- No projects in `src/content/projects/` yet — migration script TBD
+- Pages: `/`, `/about` (hand-written content, real copy), `/contact`, `/shop`, `/krampusnacht-2026`, `/projects`, `/projects/[slug]`, `/subscribed`
+- Content collections: `projects` (59 entries) and `essays` (5 entries) — schema in `src/content/config.ts`
+- 433 images under `public/images/<year>/<month>/` (~452 MB), referenced from frontmatter (`featured_image`, `gallery`) and inline body markdown as `/images/...`
 - Tailwind tokens: placeholder yonder-ink + yonder-bone scales, flat accents (brick, moss, brass, smoke, parchment) — refine when palette is decided
 - Fonts: system fallbacks — Adobe Fonts integration TBD
+- Supabase project `wfksfzajjvzyerxrjrvh` (yonderartland org), separate from DCLT
+- Cloudflare Pages deploy at `yonder-site.pages.dev`, builds on push to `main`
+- Resend account live, `yonderartland.com` verified
 
-## Migration plan from yonder-reference
+## Migration (done 2026-04-28)
 
-The `yonder-reference/` sibling has:
-- `yonderartland.sql` — 9 MB WP database dump (source of truth)
-- `content/projects/` — 47 project markdown stubs with frontmatter, mostly empty bodies
-- `content/images/<year>/<month>/` — ~5,886 images organized by year/month, NOT linked to projects
-- `posts_metadata_complete.json` — categories, lat/lon, hero_quotes for ~22 posts
+Migration scripts live in `yonder-reference/` (archive-only, ungitted):
+`populate_project_bodies.py`, `scaffold_orphan_stubs.py`,
+`rescue_park_of_flowers.py`, `match_images.py`, `backfill_geo.py`,
+`migrate_to_site.py`. All idempotent — re-runnable if `yonderartland.sql`
+ever gets re-exported.
 
-To do (migration scripts TBD):
-1. Re-extract post bodies from SQL → populate empty markdown bodies
-2. Backfill categories + lat/lon from posts_metadata_complete.json
-3. Match images to projects (use WP attachment metadata)
-4. Move populated `content/projects/` into `src/content/projects/`
+Final state delivered: 64 stubs (59 projects + 5 essays), 433 unique
+image sources, lat/lng/address backfilled for 45 stubs. `pnpm build`
+clean at 66 pages.
+
+## Subscribe flow (done 2026-04-28)
+
+Form (footer + krampusnacht-2026 page) → Supabase Edge Function
+`subscribe` → Cloudflare Turnstile verify → DB upsert into `subscribers`
+→ Resend confirmation email → user clicks link → `confirm-subscription`
+edge function flips `confirmed_at`, sends welcome email, redirects to
+`/subscribed`.
+
+Secrets in **Supabase Edge Function Secrets**: `RESEND_API_KEY`,
+`FROM_EMAIL`, `TURNSTILE_SECRET_KEY`, `SITE_URL`. Public values in
+`.env` (also Cloudflare Pages env vars): `PUBLIC_SUPABASE_URL`,
+`PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `PUBLIC_TURNSTILE_SITE_KEY`.
+
+`subscribe` deployed with `--no-verify-jwt` (the new `sb_publishable_`
+key system isn't a JWT, so gateway-level verification can't pass).
+Function does its own validation: Turnstile, honeypot, email format, DB
+constraints.
 
 ## Next yards (in order)
 
-1. Build runs cleanly (`pnpm dev`)
-2. Wire `/api/subscribe` to Resend + Supabase (needs API key + Supabase project)
-3. Migrate project content from yonder-reference (extraction script)
-4. Migrate shop products to Stripe Checkout
-5. Build mural map page (port from existing Leaflet tool)
-6. Deploy to Cloudflare Pages
+1. Render `featured_image` hero + `gallery` grid on `/projects/[slug]`
+2. Update `/projects` index tiles to use `featured_image` as background
+3. Build `/essays/index.astro` + `/essays/[slug].astro` (5 essays unrendered today)
+4. Refine palette + fonts (real values for `yonder-*` Tailwind tokens; pick serif body + display sans)
+5. Migrate shop products to Stripe Checkout
+6. Port mural discovery / Leaflet map to `/murals`
+7. **After DNS cutover** — verify full subscribe → confirm → welcome flow on `yonderartland.com`. Then either delete the `SITE_URL` Supabase secret (defaults to `https://yonderartland.com`) or set it explicitly to that URL.
+8. (Future) Build `unsubscribe` edge function + link in dispatch emails before list goes live for real.
 
 ## Ship target
 

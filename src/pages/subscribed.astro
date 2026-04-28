@@ -1,0 +1,41 @@
+---
+import Base from '@layouts/Base.astro';
+
+const status = Astro.url.searchParams.get('status');
+const reason = Astro.url.searchParams.get('reason');
+
+const isOk = status === 'ok';
+const heading = isOk ? 'Subscribed.' : 'Something went wrong.';
+const message = isOk
+  ? "You're on the list. We'll be in touch when there's something to tell you."
+  : reasonMessage(reason);
+
+function reasonMessage(r: string | null): string {
+  switch (r) {
+    case 'missing-token':
+    case 'invalid-token':
+      return "That confirmation link wasn't valid. Try subscribing again — the most recent email is the one that works.";
+    case 'unsubscribed':
+      return "This address was unsubscribed. To rejoin, subscribe again.";
+    case 'lookup':
+    case 'update':
+    default:
+      return "We couldn't confirm that subscription. Try again, or send us a note.";
+  }
+}
+---
+
+<Base title={`${heading} — Yonder Art Land`}>
+  <section class="px-6 py-24 max-w-xl mx-auto text-center">
+    <h1 class="font-display text-4xl mb-6">{heading}</h1>
+    <p class="font-serif text-lg text-yonder-bone-300 mb-10">{message}</p>
+    <p>
+      <a
+        href="/"
+        class="font-display uppercase tracking-wider text-sm text-yonder-brass hover:text-yonder-bone-200"
+      >
+        ← Back to Yonder
+      </a>
+    </p>
+  </section>
+</Base>
