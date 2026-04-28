@@ -5,7 +5,6 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    slug: z.string().optional(),
     status: z.enum(['published', 'draft']).default('published'),
     categories: z.array(z.string()).default([]),
     latitude: z.string().optional(),
@@ -13,7 +12,18 @@ const projects = defineCollection({
     address: z.string().optional(),
     hero_quote: z.string().optional(),
     featured_image: z.string().optional(),
+    gallery: z.array(z.string()).default([]),
   }),
 });
 
-export const collections = { projects };
+const essays = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    status: z.enum(['published', 'draft']).default('published'),
+    featured_image: z.string().optional(),
+  }),
+});
+
+export const collections = { projects, essays };

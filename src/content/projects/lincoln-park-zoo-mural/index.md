@@ -1,0 +1,30 @@
+---
+title: "Lincoln Park Zoo Mural"
+date: "2021-07-23"
+slug: "lincoln-park-zoo-mural"
+status: "published"
+categories: []
+latitude: "44.11113935527689"
+longitude: "-87.65711438663864"
+address: "1224 N 8th St, Manitowoc, WI 54220, USA"
+featured_image: "/images/2022/06/lincoln-park-zoo-mural-hero.jpg"
+gallery:
+  - "/images/2021/07/lincoln-park-zoo-mural-buffalo.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-frog.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-gophers.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-leopard.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-north-side.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-peacock-detail.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-peacock-logan.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-peacock.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-porcupine.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-snack-stand.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-turtles-eagle.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-turtles.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-wolf.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-zoo-crew.jpeg"
+  - "/images/2021/07/lincoln-park-zoo-mural-zoo-eastside.jpeg"
+  - "/images/2022/06/algoma-fish-hero-1.jpg"
+  - "/images/2021/07/lincoln-park-zoo-mural-peacock-thumb.jpg"
+---
+
