@@ -60,14 +60,27 @@ constraints.
 
 ## Next yards (in order)
 
-1. Render `featured_image` hero + `gallery` grid on `/projects/[slug]`
-2. Update `/projects` index tiles to use `featured_image` as background
-3. Build `/essays/index.astro` + `/essays/[slug].astro` (5 essays unrendered today)
-4. Refine palette + fonts (real values for `yonder-*` Tailwind tokens; pick serif body + display sans)
-5. Migrate shop products to Stripe Checkout
-6. Port mural discovery / Leaflet map to `/murals`
-7. **After DNS cutover** — verify full subscribe → confirm → welcome flow on `yonderartland.com`. Then either delete the `SITE_URL` Supabase secret (defaults to `https://yonderartland.com`) or set it explicitly to that URL.
-8. (Future) Build `unsubscribe` edge function + link in dispatch emails before list goes live for real.
+**Pick this up first — IA reorganization, decided 2026-04-28 evening (see `reliquary/decisions.md` for full rationale):**
+
+The current `projects` collection conflates four content types (murals / events / workshops / installations). The right fix is top-level surfaces, not filter UI. Do this BEFORE rendering tile templates, since the routes will change.
+
+1. Audit the 60 stubs, tag 8–12 that aren't murals
+2. Add `type` field to schema (`mural | event | workshop | installation`, default `'mural'`)
+3. Rename `/projects/<slug>` → `/murals/<slug>` (301 the old paths); current `/murals` (the map) → `/murals/map`
+4. Build `/murals` list view, `/events` (name TBD — Performances? Happenings?), `/workshops` index pages
+5. Update Header nav: Murals · Events · Workshops · Shop · About · Contact
+6. Build `/field-notes/` for the 5 essays — footer link only, not primary nav
+7. **Decided OUT:** putting freelance design services on Yonder. Stays on Foggy's separate freelance brand.
+
+**Then the template work that needed routes settled first:**
+
+8. Render `featured_image` hero + `gallery` grid on the per-mural page
+9. Featured-image tiles on `/murals/index.astro`, grouped by year
+10. Sort toggle on `/murals/index.astro` (vanilla JS — don't reach for Isotope)
+11. Refine palette + fonts (real values for `yonder-*` Tailwind tokens; pick serif body + display sans)
+12. Migrate shop products to Stripe Checkout
+13. **After DNS cutover** — verify full subscribe → confirm → welcome flow on `yonderartland.com`. Then either delete the `SITE_URL` Supabase secret (defaults to `https://yonderartland.com`) or set it explicitly.
+14. (Future) Build `unsubscribe` edge function + link in dispatch emails before the list grows past hand-curated friends.
 
 ## Ship target
 
