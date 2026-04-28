@@ -80,3 +80,16 @@ constraints.
 - Border radius default to 0 (matches DCLT; vitrine aesthetic)
 - Black background by default (matches existing yonderartland.com)
 - "Vitrine, not cabinet" — atmosphere through type/photography/voice; structure stays digital-native
+
+## Naming
+
+**Default to "Yonder."** "Yonder Art Land" is reserved for three contexts:
+1. `<title>` tags + meta descriptions (SEO — "Yonder" alone is too generic to rank)
+2. Footer + structured data — *Yonder Art Land · 321 Steele Street · Algoma, WI 54201*
+3. First intro on `/about` — once, then "Yonder" thereafter
+
+Everything else — headers, nav, hero copy, body prose, email from-name, subject lines, button labels — uses "Yonder." Domain stays `yonderartland.com` (artifact of availability; locals just say Yonder).
+
+Full rule lives in `reliquary/creative/yonder-aesthetic.md`. Maxim: *long form for files, short form for friends.*
+
+When writing or editing copy, default to the short form unless one of the three exceptions clearly applies.
