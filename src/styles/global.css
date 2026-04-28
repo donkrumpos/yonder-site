@@ -20,26 +20,44 @@
   }
 }
 
-/* Leaflet popup styling — dark to match Yonder palette. */
+/* Leaflet popup + control overrides — !important because leaflet.css loads
+   after our stylesheet and matches our specificity. */
 .leaflet-popup-content-wrapper {
-  background: #15110d;
-  color: #e8e2d4;
-  border-radius: 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  background: #1c1b18 !important;       /* yonder-ink-800 — warm dark */
+  color: #e3e1db !important;            /* yonder-ink-100 — bright off-white */
+  border-radius: 0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75) !important;
+  padding: 4px !important;
 }
-.leaflet-popup-content-wrapper a {
-  color: #b8945f;
+.leaflet-popup-content {
+  margin: 8px !important;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.leaflet-popup-content a {
+  color: #b8945f !important;            /* yonder-brass */
 }
 .leaflet-popup-tip {
-  background: #15110d;
+  background: #1c1b18 !important;
+  box-shadow: none !important;
 }
 .leaflet-popup-close-button {
-  color: #8a8378 !important;
+  color: #9d978a !important;            /* yonder-ink-300 */
+}
+.leaflet-popup-close-button:hover {
+  color: #e3e1db !important;
 }
 .leaflet-control-attribution {
-  background: rgba(10, 9, 7, 0.7) !important;
-  color: #8a8378 !important;
+  background: rgba(7, 7, 5, 0.75) !important;   /* yonder-ink-950 @ 75% */
+  color: #777062 !important;            /* yonder-ink-400 */
 }
 .leaflet-control-attribution a {
   color: #b8945f !important;
+}
+.leaflet-control-zoom a {
+  background: #1c1b18 !important;
+  color: #e3e1db !important;
+  border-color: #2c2a24 !important;     /* yonder-ink-700 */
+}
+.leaflet-control-zoom a:hover {
+  background: #2c2a24 !important;
 }

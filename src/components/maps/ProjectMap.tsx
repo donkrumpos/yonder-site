@@ -117,13 +117,13 @@ function PopupBody({
   return (
     <>
       {isCurrent ? (
-        <div style={{ marginBottom: 8 }}>{inner}</div>
+        <div style={{ marginBottom: 8, color: '#e3e1db' }}>{inner}</div>
       ) : (
         <a
           href={`/projects/${project.slug}`}
           style={{
             display: 'block',
-            color: '#e8e2d4',
+            color: '#e3e1db',
             textDecoration: 'none',
             marginBottom: 8,
           }}
