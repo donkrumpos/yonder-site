@@ -19,3 +19,27 @@
     @apply bg-yonder-brass text-yonder-ink-950;
   }
 }
+
+/* Leaflet popup styling — dark to match Yonder palette. */
+.leaflet-popup-content-wrapper {
+  background: #15110d;
+  color: #e8e2d4;
+  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+.leaflet-popup-content-wrapper a {
+  color: #b8945f;
+}
+.leaflet-popup-tip {
+  background: #15110d;
+}
+.leaflet-popup-close-button {
+  color: #8a8378 !important;
+}
+.leaflet-control-attribution {
+  background: rgba(10, 9, 7, 0.7) !important;
+  color: #8a8378 !important;
+}
+.leaflet-control-attribution a {
+  color: #b8945f !important;
+}

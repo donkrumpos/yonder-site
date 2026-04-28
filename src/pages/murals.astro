@@ -1,0 +1,27 @@
+---
+import Base from '@layouts/Base.astro';
+import ProjectMap from '@components/maps/ProjectMap';
+import { getMapProjects } from '@lib/map-projects';
+
+const mapProjects = await getMapProjects();
+---
+
+<Base
+  title="Mural Map — Yonder"
+  description={`${mapProjects.length} Yonder projects across Wisconsin and beyond — pan and zoom to explore.`}
+>
+  <section class="px-6 pt-16 pb-8 max-w-5xl mx-auto">
+    <h1 class="font-display text-4xl mb-4">Mural Map</h1>
+    <p class="font-serif text-lg text-yonder-bone-300 max-w-2xl">
+      {mapProjects.length} Yonder projects with a fixed location. Click a marker
+      to see the project. Pan and zoom to find one near you.
+    </p>
+  </section>
+  <section class="px-6 pb-16 max-w-5xl mx-auto">
+    <ProjectMap
+      projects={mapProjects}
+      height="70vh"
+      client:only="react"
+    />
+  </section>
+</Base>

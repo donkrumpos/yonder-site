@@ -1,6 +1,8 @@
 ---
 import Base from '@layouts/Base.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import ProjectMap from '@components/maps/ProjectMap';
+import { getMapProjects } from '@lib/map-projects';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', ({ data }) => data.status === 'published');
@@ -16,6 +18,12 @@ interface Props {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
+
+// Show the map only if THIS project has a parseable location.
+const hasLocation =
+  Number.isFinite(parseFloat(project.data.latitude ?? '')) &&
+  Number.isFinite(parseFloat(project.data.longitude ?? ''));
+const mapProjects = hasLocation ? await getMapProjects() : [];
 ---
 
 <Base
@@ -40,4 +48,21 @@ const { Content } = await project.render();
       <Content />
     </div>
   </article>
+
+  {hasLocation && mapProjects.length > 0 && (
+    <section class="px-6 pb-16 max-w-5xl mx-auto">
+      <h2 class="font-display text-2xl uppercase tracking-wider text-yonder-bone-200 mb-6">
+        Project Locations
+      </h2>
+      <ProjectMap
+        projects={mapProjects}
+        currentSlug={project.slug}
+        height="500px"
+        client:only="react"
+      />
+      <p class="mt-4 text-sm text-yonder-bone-500">
+        Other Yonder work nearby — pan and zoom to explore. <a href="/murals" class="text-yonder-brass hover:text-yonder-bone-200">See the full map →</a>
+      </p>
+    </section>
+  )}
 </Base>
