@@ -84,6 +84,73 @@ const createClusterIcon = (cluster: { getChildCount: () => number }) => {
   });
 };
 
+function PopupBody({
+  project,
+  isCurrent,
+}: {
+  project: MapProject;
+  isCurrent: boolean;
+}) {
+  const inner = (
+    <>
+      {project.featuredImage && (
+        <img
+          src={project.featuredImage}
+          alt=""
+          style={{
+            width: '100%',
+            height: 100,
+            objectFit: 'cover',
+            display: 'block',
+            marginBottom: 8,
+          }}
+          loading="lazy"
+        />
+      )}
+      <div style={{ fontWeight: 600, marginBottom: 2 }}>{project.title}</div>
+      {project.year != null && (
+        <div style={{ color: '#8a8378', fontSize: 12 }}>{project.year}</div>
+      )}
+    </>
+  );
+
+  return (
+    <>
+      {isCurrent ? (
+        <div style={{ marginBottom: 8 }}>{inner}</div>
+      ) : (
+        <a
+          href={`/projects/${project.slug}`}
+          style={{
+            display: 'block',
+            color: '#e8e2d4',
+            textDecoration: 'none',
+            marginBottom: 8,
+          }}
+        >
+          {inner}
+        </a>
+      )}
+      <div
+        style={{
+          fontSize: 11,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+        }}
+      >
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${project.lat},${project.lng}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#b8945f', textDecoration: 'none' }}
+        >
+          Directions ↗
+        </a>
+      </div>
+    </>
+  );
+}
+
 export default function ProjectMap({
   projects,
   currentSlug,
@@ -124,44 +191,10 @@ export default function ProjectMap({
             >
               <Popup className="yonder-map-popup" maxWidth={240}>
                 <div style={{ minWidth: 200 }}>
-                  {p.featuredImage && (
-                    <img
-                      src={p.featuredImage}
-                      alt=""
-                      style={{
-                        width: '100%',
-                        height: 100,
-                        objectFit: 'cover',
-                        display: 'block',
-                        marginBottom: 8,
-                      }}
-                      loading="lazy"
-                    />
-                  )}
-                  <div style={{ fontWeight: 600, marginBottom: 2 }}>{p.title}</div>
-                  {p.year != null && (
-                    <div style={{ color: '#8a8378', fontSize: 12, marginBottom: 8 }}>
-                      {p.year}
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', gap: 12, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {p.slug !== currentSlug && (
-                      <a
-                        href={`/projects/${p.slug}`}
-                        style={{ color: '#b8945f', textDecoration: 'none' }}
-                      >
-                        View →
-                      </a>
-                    )}
-                    <a
-                      href={`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#b8945f', textDecoration: 'none' }}
-                    >
-                      Directions ↗
-                    </a>
-                  </div>
+                  <PopupBody
+                    project={p}
+                    isCurrent={p.slug === currentSlug}
+                  />
                 </div>
               </Popup>
             </Marker>
