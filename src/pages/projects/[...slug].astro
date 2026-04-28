@@ -1,0 +1,43 @@
+---
+import Base from '@layouts/Base.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => data.status === 'published');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Base
+  title={`${project.data.title} — Yonder Art Land`}
+  description={project.data.hero_quote ?? undefined}
+>
+  <article class="px-6 py-16 max-w-3xl mx-auto">
+    <p class="text-xs uppercase tracking-widest text-yonder-brass mb-4">
+      {project.data.date.getFullYear()}
+      {project.data.categories.length > 0 && ` · ${project.data.categories.join(', ')}`}
+    </p>
+    <h1 class="font-display text-4xl md:text-5xl mb-6">{project.data.title}</h1>
+    {project.data.address && (
+      <p class="text-yonder-bone-500 mb-8">{project.data.address}</p>
+    )}
+    {project.data.hero_quote && (
+      <blockquote class="font-serif text-2xl italic text-yonder-bone-300 border-l-2 border-yonder-brass pl-6 my-8">
+        {project.data.hero_quote}
+      </blockquote>
+    )}
+    <div class="prose prose-invert font-serif text-lg text-yonder-bone-300 max-w-none">
+      <Content />
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,52 @@
+---
+import SubscribeForm from '@components/forms/SubscribeForm.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-yonder-ink-700 px-6 py-12 mt-24">
+  <div class="max-w-4xl mx-auto grid gap-8 md:grid-cols-2">
+    <div>
+      <h3 class="font-display uppercase tracking-widest text-sm mb-3">
+        Stay in touch
+      </h3>
+      <p class="text-sm text-yonder-bone-300 mb-4">
+        Krampusnacht ticket priority. New prints. Notes from the studio.
+      </p>
+      <SubscribeForm />
+    </div>
+    <div class="text-sm text-yonder-bone-300">
+      <h3 class="font-display uppercase tracking-widest text-sm mb-3 text-yonder-bone-200">
+        Visit
+      </h3>
+      <address class="not-italic space-y-1">
+        <div>321 Steele Street</div>
+        <div>Algoma, WI 54201</div>
+        <div>
+          <a href="tel:9202644325" class="hover:text-yonder-brass">
+            920-264-4325
+          </a>
+        </div>
+      </address>
+      <div class="flex gap-4 mt-4">
+        <a
+          href="https://instagram.com/yonderartland"
+          class="hover:text-yonder-brass"
+          rel="noopener"
+        >
+          Instagram
+        </a>
+        <a
+          href="https://facebook.com/yonderartland"
+          class="hover:text-yonder-brass"
+          rel="noopener"
+        >
+          Facebook
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="text-xs text-yonder-bone-500 text-center mt-12">
+    &copy; {currentYear} Yonder Art Land
+  </div>
+</footer>

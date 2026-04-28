@@ -1,0 +1,26 @@
+---
+// Subscribe form — scaffold only.
+// Wire up to /api/subscribe (Resend + Supabase) once env vars are configured.
+---
+
+<form
+  action="/api/subscribe"
+  method="POST"
+  class="flex flex-col sm:flex-row gap-2"
+>
+  <label class="sr-only" for="subscribe-email">Email</label>
+  <input
+    id="subscribe-email"
+    type="email"
+    name="email"
+    required
+    placeholder="your@email.com"
+    class="flex-1 bg-transparent border border-yonder-ink-600 px-3 py-2 text-yonder-bone-200 placeholder-yonder-bone-500 focus:outline-none focus:border-yonder-brass"
+  />
+  <button
+    type="submit"
+    class="bg-yonder-brass text-yonder-ink-950 px-4 py-2 font-display uppercase tracking-wider text-sm hover:bg-yonder-bone-200 transition-colors"
+  >
+    Subscribe
+  </button>
+</form>

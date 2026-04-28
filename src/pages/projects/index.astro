@@ -1,0 +1,36 @@
+---
+import Base from '@layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', ({ data }) => data.status === 'published'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Projects — Yonder Art Land">
+  <section class="px-6 py-16 max-w-6xl mx-auto">
+    <h1 class="font-display text-4xl mb-8">Projects</h1>
+    {projects.length === 0 ? (
+      <p class="text-yonder-bone-300">
+        No projects migrated yet. Run the import script to populate from yonder-reference.
+      </p>
+    ) : (
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+        {projects.map((project) => (
+          <a
+            href={`/projects/${project.slug}`}
+            class="block aspect-square bg-yonder-ink-800 hover:opacity-80 transition-opacity"
+          >
+            <div class="p-3 text-xs">
+              <div class="font-display uppercase tracking-wider truncate">
+                {project.data.title}
+              </div>
+              <div class="text-yonder-bone-500 mt-1">
+                {project.data.date.getFullYear()}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</Base>

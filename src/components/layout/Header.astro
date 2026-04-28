@@ -1,0 +1,32 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/krampusnacht-2026', label: 'Krampusnacht 2026' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/shop', label: 'Shop' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+
+<header class="border-b border-yonder-ink-700 px-6 py-4">
+  <nav class="flex flex-wrap items-center justify-between gap-4">
+    <a href="/" class="font-display text-lg uppercase tracking-widest">
+      Yonder
+    </a>
+    <ul class="flex flex-wrap gap-6 text-sm">
+      {
+        navItems.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class="hover:text-yonder-brass transition-colors"
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
